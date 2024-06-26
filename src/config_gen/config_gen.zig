@@ -950,7 +950,8 @@ fn httpGET(allocator: std.mem.Allocator, uri: std.Uri) !Response {
 
     var client = std.http.Client{ .allocator = allocator };
     defer client.deinit();
-    try client.initDefaultProxies(arena_allocator.allocator());
+    if (@hasDecl(std.http.Client, "loadDefaultProxies"))
+        try client.loadDefaultProxies();
 
     var server_header_buffer: [16 * 1024]u8 = undefined;
 
